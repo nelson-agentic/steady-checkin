@@ -277,6 +277,14 @@ function handleSaveStartDate() {
     alert("Please choose a date first.");
     return;
   }
+
+  // A start date in the future produces a negative day count, which the
+  // milestone logic has no sensible answer for.
+  if (daysSince(input.value) < 0) {
+    alert("That date is in the future. Please choose today or an earlier date.");
+    return;
+  }
+
   saveStartDate(input.value);
   renderPanels();
   renderProgress();
@@ -350,6 +358,11 @@ function handleResetData() {
 
 /** Attaches every event listener and draws the initial screen. */
 function init() {
+  // Cap the date picker at today so a future start date can't be chosen in
+  // the first place. handleSaveStartDate still checks, since the attribute
+  // alone is not a guarantee.
+  document.getElementById("start-date-input").max = todayKey();
+
   document.getElementById("save-start-date").addEventListener("click", handleSaveStartDate);
   document.getElementById("mood-row").addEventListener("click", handleMoodClick);
   document.getElementById("craving-slider").addEventListener("input", handleCravingInput);
