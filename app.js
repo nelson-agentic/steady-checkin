@@ -63,7 +63,17 @@ function loadCheckins() {
   try {
     const raw = localStorage.getItem(STORAGE_CHECKINS);
     const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+
+    // Checking the shape of each entry, not just the type of the container.
+    // Valid JSON can still hold the wrong objects, and a missing trigger or
+    // craving would throw further down in renderInsights.
+    return parsed.filter(entry =>
+      entry
+      && typeof entry.date === "string"
+      && Number.isFinite(entry.craving)
+      && typeof entry.trigger === "string"
+    );
   } catch (error) {
     console.warn("Stored check-ins were unreadable, starting fresh.", error);
     return [];
