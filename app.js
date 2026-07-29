@@ -186,20 +186,32 @@ function renderInsights(checkins) {
   const topTrigger = Object.keys(triggerCounts)
     .sort((a, b) => triggerCounts[b] - triggerCounts[a])[0];
 
-  container.innerHTML = `
-    <div class="insight">
-      <span class="insight-value">${averageCraving}</span>
-      <span class="insight-label">Avg craving, last 7</span>
-    </div>
-    <div class="insight">
-      <span class="insight-value">${checkins.length}</span>
-      <span class="insight-label">Check-ins logged</span>
-    </div>
-    <div class="insight">
-      <span class="insight-value">${topTrigger ? topTrigger : "—"}</span>
-      <span class="insight-label">Most named trigger</span>
-    </div>
-  `;
+  // Built with createElement rather than innerHTML. The most-named trigger is
+  // derived from the free-text field, so it is user input and must be set with
+  // textContent for the same reason the history list is.
+  container.innerHTML = "";
+
+  const tiles = [
+    [averageCraving, "Avg craving, last 7"],
+    [String(checkins.length), "Check-ins logged"],
+    [topTrigger || "—", "Most named trigger"]
+  ];
+
+  tiles.forEach(([value, label]) => {
+    const tile = document.createElement("div");
+    tile.className = "insight";
+
+    const valueEl = document.createElement("span");
+    valueEl.className = "insight-value";
+    valueEl.textContent = value;
+
+    const labelEl = document.createElement("span");
+    labelEl.className = "insight-label";
+    labelEl.textContent = label;
+
+    tile.append(valueEl, labelEl);
+    container.appendChild(tile);
+  });
 }
 
 /** Renders the list of past check-ins, newest first. */
