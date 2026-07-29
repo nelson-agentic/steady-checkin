@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steady — Daily Recovery Check-In</title>
+  <meta name="description" content="A private daily check-in and coping toolkit for people in recovery. Everything stays on your device.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <h1>Steady</h1>
+    <p class="tagline">A daily check-in and coping toolkit. Everything stays on your device.</p>
+  </header>
+
+  <main>
+
+    <!-- SETUP: only shown until the user saves a recovery start date -->
+    <section id="setup-panel" class="card" hidden>
+      <h2>Welcome</h2>
+      <p>Steady tracks how you're doing day to day and offers a coping strategy when cravings run high.</p>
+      <label for="start-date-input">When did your recovery start?</label>
+      <input type="date" id="start-date-input">
+      <button id="save-start-date" class="btn-primary">Start tracking</button>
+    </section>
+
+    <!-- PROGRESS: day counter and next milestone -->
+    <section id="progress-panel" class="card progress" hidden>
+      <p class="day-count"><span id="day-number">0</span></p>
+      <p class="day-label">days in recovery</p>
+      <p id="milestone-note" class="milestone"></p>
+    </section>
+
+    <!-- CHECK-IN: the main daily form -->
+    <section id="checkin-panel" class="card" hidden>
+      <h2>How is today going?</h2>
+
+      <fieldset>
+        <legend>Mood</legend>
+        <div class="mood-row" id="mood-row">
+          <button type="button" class="mood-btn" data-mood="1" aria-label="Very low">😞</button>
+          <button type="button" class="mood-btn" data-mood="2" aria-label="Low">😕</button>
+          <button type="button" class="mood-btn" data-mood="3" aria-label="Okay">😐</button>
+          <button type="button" class="mood-btn" data-mood="4" aria-label="Good">🙂</button>
+          <button type="button" class="mood-btn" data-mood="5" aria-label="Very good">😄</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>
+          Craving intensity — <span id="craving-value">0</span>/10
+        </legend>
+        <input type="range" id="craving-slider" min="0" max="10" value="0" step="1">
+        <div class="scale-ends"><span>None</span><span>Intense</span></div>
+      </fieldset>
+
+      <label for="trigger-input">Anything that set it off? (optional)</label>
+      <input type="text" id="trigger-input" maxlength="80" placeholder="e.g. stress, poor sleep, an argument">
+
+      <button id="save-checkin" class="btn-primary">Save today's check-in</button>
+      <p id="checkin-status" class="status" role="status"></p>
+    </section>
+
+    <!-- COPING STRATEGY: surfaced automatically on a high craving, or on demand -->
+    <section id="coping-panel" class="card coping" hidden>
+      <h2>Try this right now</h2>
+      <p id="coping-text"></p>
+      <button id="another-strategy" class="btn-secondary">Show me another</button>
+    </section>
+
+    <!-- HISTORY: recent check-ins plus simple pattern insights -->
+    <section id="history-panel" class="card" hidden>
+      <h2>Your recent check-ins</h2>
+      <div id="insights" class="insights"></div>
+      <ul id="history-list" class="history-list"></ul>
+      <button id="reset-data" class="btn-danger">Erase all my data</button>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p><strong>If you are in crisis, call or text 988</strong> (Suicide &amp; Crisis Lifeline, US)
+       or call SAMHSA's National Helpline at 1-800-662-4357.</p>
+    <p class="disclaimer">Steady is a self-tracking tool, not medical advice or treatment.
+       It does not replace care from a doctor, counselor, or sponsor.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
