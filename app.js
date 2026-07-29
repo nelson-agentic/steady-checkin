@@ -115,10 +115,15 @@ function nextMilestone(dayCount) {
   return MILESTONES.find(milestone => milestone > dayCount) || null;
 }
 
-/** Picks a random coping strategy. */
+// The strategy shown most recently, so "Show me another" never repeats it.
+let lastStrategy = null;
+
+/** Picks a random coping strategy, excluding the one currently on screen. */
 function randomStrategy() {
-  const index = Math.floor(Math.random() * COPING_STRATEGIES.length);
-  return COPING_STRATEGIES[index];
+  const options = COPING_STRATEGIES.filter(strategy => strategy !== lastStrategy);
+  const index = Math.floor(Math.random() * options.length);
+  lastStrategy = options[index];
+  return lastStrategy;
 }
 
 /** Formats YYYY-MM-DD as a short readable date, e.g. "Jul 29". */
