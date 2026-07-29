@@ -85,9 +85,11 @@ trigger field is free text the user types.
 > If someone types HTML into the trigger box, what happens when it renders?
 
 It would be parsed as markup. I had it rebuilt using `createElement` and `textContent` for the
-user-supplied values, so typed input is always treated as text. The insights tiles still use
-`innerHTML` because those values are numbers and counts the app calculates, not raw user input —
-that was a deliberate distinction, not an oversight.
+user-supplied values, so typed input is always treated as text.
+
+I left the insights tiles on `innerHTML`, reasoning that those values were numbers and counts the
+app calculates rather than anything the user typed. That reasoning was wrong, and I go through
+how I caught it in the audit section below.
 
 **Corrupt storage**
 
@@ -114,6 +116,52 @@ I didn't take "it works" as an answer. What I checked in the browser:
 
 The same-day replacement was the one I most expected to be wrong, because it's easy to write it as
 an append and not notice until you have two entries for one day.
+
+---
+
+## Auditing the finished build
+
+Once the project was working and documented, I ran one more pass over it — this time reading the
+code against the claims I had already written down in this file, rather than against the
+requirements. Five things came out of it.
+
+**The `innerHTML` claim was wrong.** I had written that the insights tiles held only calculated
+values, so `innerHTML` was safe there. Reading the function again, the "most named trigger" tile
+displays `entry.trigger` — the same free-text field I had just hardened the history list against.
+It reaches the tile lowercased and counted, but it is still whatever the user typed, and it was
+going through `innerHTML`. Typing markup into the trigger box and saving it enough times to make
+it the top trigger would render that markup.
+
+The blast radius is small: no server, no other users, `localStorage` scoped to the user's own
+browser. But "small blast radius" is not the same as correct, and the more useful lesson is that
+I had written a confident justification for the exact line that was wrong. Rebuilt with
+`createElement` and `textContent`, matching the history list.
+
+**The shape check was missing.** `loadCheckins` caught invalid JSON and non-array values, but not
+an array holding the wrong objects. A stored entry without a `trigger` field would throw on
+`.trim()` inside `renderInsights` — the crash I thought I had already prevented, arriving through
+a door I had not checked. Entries are now filtered on the fields the app actually reads.
+
+**Future start dates.** Nothing stopped a user picking a date ahead of today, which makes
+`daysSince` return a negative number and gives the milestone lookup nothing sensible to do. The
+date input is now capped at today, with the validation repeated in the handler — an HTML attribute
+constrains the picker, it does not guarantee the value.
+
+**"Show me another" could show the same one.** `randomStrategy` picked from the full list every
+time, so pressing the button could return the strategy already on screen. It now excludes the
+current one.
+
+**The craving slider had no accessible name.** The mood buttons had `aria-label`s from the start,
+but the range input inherited nothing usable — a screen reader announced it without saying what it
+measured. Added.
+
+Each of these went in as its own commit, so the history shows what was found and why it mattered
+rather than one undifferentiated "fixes" change.
+
+What I take from this pass: the bugs I found while building came from asking about inputs. The
+bugs I found afterward came from checking my own written reasoning against the code. Those are two
+different habits, and the second one only works if the reasoning was written down in the first
+place.
 
 ---
 
