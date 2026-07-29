@@ -1,0 +1,320 @@
+/* ---------------------------------------------------------------
+   Steady — stylesheet
+   Layout and presentation only. No behaviour lives in this file.
+   Colours are defined once as variables so the whole palette can be
+   adjusted in one place.
+   --------------------------------------------------------------- */
+
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --text: #1c2430;
+  --text-soft: #5a6675;
+  --accent: #2f6f5e;          /* calm green — used for primary actions */
+  --accent-soft: #e3efeb;
+  --warn: #a8501f;            /* used when a craving is logged high */
+  --warn-soft: #fbeee5;
+  --danger: #8b2c2c;
+  --border: #dde3ea;
+  --radius: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161a1f;
+    --surface: #1f252c;
+    --text: #e8edf2;
+    --text-soft: #9aa7b4;
+    --accent: #5fbfa4;
+    --accent-soft: #23342f;
+    --warn: #e0a075;
+    --warn-soft: #33272020;
+    --danger: #d98080;
+    --border: #2d353e;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 1rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+main {
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+/* --- header / footer --- */
+
+.site-header {
+  max-width: 34rem;
+  margin: 1rem auto 1.5rem;
+  text-align: center;
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+.tagline {
+  margin: 0.25rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+}
+
+.site-footer {
+  max-width: 34rem;
+  margin: 2rem auto 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.disclaimer { font-style: italic; }
+
+/* --- cards --- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+/* --- progress / day counter --- */
+
+.progress { text-align: center; }
+
+.day-count {
+  margin: 0;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.day-label {
+  margin: 0.25rem 0 0;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+}
+
+.milestone {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+}
+
+/* --- form controls --- */
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+}
+
+legend {
+  padding: 0;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+input[type="date"],
+input[type="text"] {
+  width: 100%;
+  padding: 0.6rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.scale-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+}
+
+/* --- mood buttons --- */
+
+.mood-row {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.mood-btn {
+  flex: 1;
+  font-size: 1.6rem;
+  padding: 0.5rem 0;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.mood-btn:hover { border-color: var(--accent); }
+
+/* .selected is toggled by app.js, not by CSS alone */
+.mood-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* --- buttons --- */
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.btn-danger {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  font-size: 0.85rem;
+}
+
+/* --- status message --- */
+
+.status {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--accent);
+  min-height: 1.2rem;
+}
+
+/* --- coping card --- */
+
+.coping {
+  border-left: 4px solid var(--warn);
+  background: var(--warn-soft);
+}
+
+#coping-text {
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+}
+
+/* --- history --- */
+
+.insights {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.insight {
+  flex: 1;
+  min-width: 8rem;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+}
+
+.insight-value {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.insight-label {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 18rem;
+  overflow-y: auto;
+}
+
+.history-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.history-date {
+  color: var(--text-soft);
+  min-width: 4.5rem;
+}
+
+.history-craving {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-soft);
+}
+
+.history-trigger {
+  font-style: italic;
+  color: var(--text-soft);
+}
+
+.empty-note {
+  color: var(--text-soft);
+  font-style: italic;
+}
